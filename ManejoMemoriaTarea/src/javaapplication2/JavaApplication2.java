@@ -19,8 +19,12 @@ public class JavaApplication2 {
     public static void main(String[] args) {
         CPUController cpu = new CPUController();
         String pa = "/Users/ricardosoto/Downloads/asm1/asm1.asm";
-        cpu.start(pa,100);
-        Random rand = new Random();
+        cpu.setCPUMemory(pa, 100);
+        int cantinstrucciones = 7; 
+        for(int i = 0 ; i < cantinstrucciones; i ++){
+         cpu.executeInstruction();   
+        }
+        
         
          
 

@@ -14,9 +14,11 @@ import java.util.Random;
  * @author ricardosoto
  */
 public class Memory {
-    int size;    
-    ArrayList<Optional<MemoryRegister>> registers;
-    final int START_INDEX = 10;
+    private int size;    
+    private ArrayList<Optional<MemoryRegister>> registers;
+    private final int START_INDEX = 10;
+    private int allocationIndex = 0;
+    private int allocatedMemorySize = 0; 
     
     
     public Memory(int size){
@@ -26,6 +28,7 @@ public class Memory {
         }
         this.size = size;
     }
+    
     
     public ArrayList<Optional<MemoryRegister>> getInstructions(){
         return this.registers;
@@ -49,6 +52,9 @@ public class Memory {
     public void clean(){
        this.registers.clear();       
     }
+    public int getAllocationIndex(){
+        return this.allocationIndex;
+    }
     
     public void allocate(ArrayList<MemoryRegister> instructions){
         //Inicia a partir del índice START_INDEX
@@ -61,13 +67,18 @@ public class Memory {
             
         }
         int j = 0;
-                       
+        this.allocationIndex = startAllocate;
+                     
         for(int i = startAllocate ; i <instructions.size()+startAllocate; i ++){
             this.registers.add(i, Optional.of(instructions.get(j)));
             j++;
          }        
+        this.allocatedMemorySize = instructions.size();
         
         
+    }
+    public int geAllocatedMemorySize(){
+        return this.allocatedMemorySize;
     }
     
     

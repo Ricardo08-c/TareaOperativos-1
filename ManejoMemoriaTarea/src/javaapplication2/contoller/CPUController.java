@@ -26,6 +26,7 @@ public class CPUController {
     private final CPURegister dx = new CPURegister(0); 
     private Integer ir =0;
     private Integer pc =0;
+    private Memory memory;
     private final CPURegister ac = new CPURegister(0);
     public CPUController(){
         this.registerAddressMapper.put(1, ax);
@@ -35,8 +36,51 @@ public class CPUController {
                 
         
     }
+    public Memory getMemory(){
+        return this.memory;
+    }
+    //Ejecuta la instruccion segun el PC (una a una)
+    public void executeInstruction(){
+        if(this.pc ==0 ){
+            this.pc = this.memory.getAllocationIndex();
+        }
+        Optional<MemoryRegister> register = memory.getInstructions().get(this.pc);
+        MemoryRegister instruction = register.get();
+        String result = String.format("%16s", Integer.toBinaryString(instruction.getValue() & 0xFFFF)).replace(' ', '0');
+        Integer res = Integer.parseInt(result,2);
+
+        this.ir = Integer.parseInt(instruction.getOperator().toString() + instruction.getAdress().toString() + res.toString());
+        switch (instruction.getOperator()) {                
+            case 3 -> executeMov(instruction);
+            case 1 -> executeLoad(instruction);
+            case 2 -> executeStore(instruction);
+            case 4 -> executeSub(instruction);
+            case 5 -> executeAdd(instruction);
+            default -> {
+            }
+         
+        }
+        this.pc++;
+            
+            System.out.println("-------------------------------");
+            System.out.println("Ax Value:" + this.ax.getValue());
+            System.out.println("Bx Value:" + this.bx.getValue());
+            System.out.println("Cx Value:" + this.cx.getValue());
+            System.out.println("Dx Value:" + this.dx.getValue());
+            System.out.println("AC Value:" + this.ac.getValue());
+            System.out.println("IR:" + this.ir.toString());
+            System.out.println("PC:" + this.pc.toString());
+            System.out.println("Binario:" + instruction.toBinaryString());
+            System.out.println("-------------------------------");
+    }
+        
     
-    public void start(String  path, int memSize){
+    public void setCPUMemory(String  path, int memSize){
+        this.memory = new Memory(memSize);
+        FileLoader loader = new FileLoader(path);
+        this.memory.allocate(loader.getInstrucionSet());
+    }
+    public void executeAll(String  path, int memSize){
         
         Memory memory = new Memory(memSize);
         FileLoader loader = new FileLoader(path);

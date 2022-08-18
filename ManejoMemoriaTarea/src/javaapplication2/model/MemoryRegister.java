@@ -48,6 +48,19 @@ public class MemoryRegister implements Register{
         
         return ms;
     }
+    public String toBinaryString(){
+        String ms = "";
+         
+        String value = String.format("%16s", Integer.toBinaryString(this.getValue() & 0xFFFF)).replace(' ', '0');
+        String op = String.format("%16s", Integer.toBinaryString(this.operator & 0xFFFF)).replace(' ', '0');
+        String address = String.format("%16s", Integer.toBinaryString(this.address & 0xFFFF)).replace(' ', '0');
+        
+        ms = ms + op + " ";
+        ms = ms + address + " ";
+        ms = ms + value + " " + "\n";
+        
+        return ms;
+    }
   
     
 }

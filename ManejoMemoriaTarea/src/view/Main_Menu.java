@@ -5,8 +5,10 @@
 package view;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import javaapplication2.contoller.CPUController;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -113,6 +115,12 @@ public class Main_Menu extends javax.swing.JFrame {
     private void btmCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmCargarActionPerformed
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(null);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("assembly","*.asm");
+
+
+        //chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        
+            
         File loadedFile = chooser.getSelectedFile();
         this.file = loadedFile;
         //String filename = file.getAbsolutePath();

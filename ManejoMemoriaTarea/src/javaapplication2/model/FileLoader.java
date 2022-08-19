@@ -71,14 +71,13 @@ public class FileLoader {
     }
     private boolean validGrammar(String line){
         String[] comaSplit = line.split(",");        
-        if(comaSplit.length == 2){
-            
-            return this.validAsignation(comaSplit);
-                
-        } else if(comaSplit.length == 1){
-             return this.validOperation(comaSplit);
-        } else {                                
-            return false;
+        switch (comaSplit.length) {
+            case 2:
+                return this.validAsignation(comaSplit);
+            case 1:
+                return this.validOperation(comaSplit);
+            default:
+                return false;
         }
         
         
@@ -88,7 +87,7 @@ public class FileLoader {
         
         String[] asignation = splitedLine[0].split(" ");
         Integer opr = instructionMapper.get(asignation[0].toLowerCase());
-        if(asignation.length <= 1){
+        if(asignation.length <= 1 || asignation.length >2){
             return false;
         }
         Integer reg = registerMapper.get(asignation[1].toLowerCase());
@@ -103,7 +102,7 @@ public class FileLoader {
     }
     private boolean validOperation(String[] splitedLine){
          String[] asignation = splitedLine[0].split(" ");
-          if(asignation.length <= 1){
+          if(asignation.length <= 1 || asignation.length >2){
             return false;
         }
         Integer opr = instructionMapper.get(asignation[0].toLowerCase());

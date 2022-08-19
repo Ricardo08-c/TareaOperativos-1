@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import javaapplication2.contoller.CPUController;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -60,8 +61,13 @@ public class CPU_Menu extends javax.swing.JFrame {
         this.model.setRowCount(this.size);
         this.model.addColumn("Instrucción en código binario");
         this.model.addColumn("Posición en memoria");
-        this.table.setModel(model);
-        this.table.getColumn("Posición en memoria").setPreferredWidth(30);
+        this.table.setModel(model);    
+        this.table.getColumnModel().getColumn(1).setResizable(true);
+        this.table.getColumnModel().getColumn(1).setMaxWidth(60);
+        
+        
+       
+              
         fillTable();
         
         /*
@@ -406,6 +412,11 @@ public class CPU_Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btmNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmNextActionPerformed
+        if(this.cpu.programFinished()){
+             JOptionPane.showMessageDialog(this.table, "El programa ya terminó de ejecutarse");
+             return;
+
+        }
         ArrayList<String> instruction = this.cpu.executeInstruction();
         
         txtAX.setText(instruction.get(0));
@@ -414,7 +425,8 @@ public class CPU_Menu extends javax.swing.JFrame {
         txtDX.setText(instruction.get(3));
         txtAC.setText(instruction.get(4));
         txtIR.setText(instruction.get(5));
-        txtPC.setText(instruction.get(6));
+        Integer a = Integer.parseInt(instruction.get(6))+1;
+        txtPC.setText(a.toString());
         
         table.setValueAt(instruction.get(7), Integer.parseInt(instruction.get(6)), 0);
         

@@ -31,7 +31,8 @@ public class CPUController {
     private Integer ir =0;
     private Integer pc =0;
     private Memory memory;
-    FileLoader loader;
+    private FileLoader loader;
+    private boolean programFinished = false;
     private final CPURegister ac = new CPURegister(0);
     //CPU_Menu menu = new CPU_Menu();
     
@@ -55,6 +56,10 @@ public class CPUController {
         return loader;
     }
     
+    public boolean programFinished(){        
+        return this.pc >= this.memory.getAllocationIndex()+this.memory.geAllocatedMemorySize();
+    }
+    
     
     
     
@@ -64,6 +69,7 @@ public class CPUController {
             this.pc = this.memory.getAllocationIndex();
         }
         Optional<MemoryRegister> register = memory.getInstructions().get(this.pc);
+      
         MemoryRegister instruction = register.get();
         String result = String.format("%16s", Integer.toBinaryString(instruction.getValue() & 0xFFFF)).replace(' ', '0');
         Integer res = Integer.parseInt(result,2);
@@ -89,7 +95,8 @@ public class CPUController {
             list.add(this.dx.getValue().toString());
             list.add(this.ac.getValue().toString());
             list.add(this.ir.toString());
-            list.add(this.pc.toString());
+            Integer pcPlus = this.pc+1;
+            list.add(pcPlus.toString());
             list.add(instruction.toBinaryString());
             
             System.out.println("-------------------------------");
@@ -121,7 +128,7 @@ public class CPUController {
         this.loader = new FileLoader(path);
         this.memory.allocate(loader.getInstrucionSet());
     }
-    public Object [][] executeAll(String  path, int memSize){
+    public void executeAll(String  path, int memSize){
         
         Memory memory = new Memory(memSize);
         FileLoader loader = new FileLoader(path);
@@ -154,7 +161,7 @@ public class CPUController {
                 }
             }
             
-           s[this.pc][0] = instruction.toBinaryString();
+
             
             
             System.out.println("PC:" + this.pc.toString());
@@ -172,7 +179,7 @@ public class CPUController {
             */
         }
         
-        return s;
+        
         
         
     }

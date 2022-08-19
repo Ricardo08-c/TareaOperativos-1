@@ -80,6 +80,12 @@ public class Memory {
     public int geAllocatedMemorySize(){
         return this.allocatedMemorySize;
     }
+
+    public int getSize() {
+        return size;
+    }
+    
+    
     
     
 }

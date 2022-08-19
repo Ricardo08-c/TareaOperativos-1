@@ -4,6 +4,7 @@
  */
 package javaapplication2.contoller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import javaapplication2.model.CPURegister;
 import javaapplication2.model.FileLoader;
 import javaapplication2.model.Memory;
 import javaapplication2.model.MemoryRegister;
+import view.CPU_Menu;
 
 
 /**
@@ -19,6 +21,8 @@ import javaapplication2.model.MemoryRegister;
  * @author ricardosoto
  */
 public class CPUController {
+    
+    
     private final HashMap<Integer,CPURegister> registerAddressMapper = new HashMap<>();
     private final CPURegister ax = new CPURegister(0);
     private final CPURegister bx = new CPURegister(0);
@@ -27,7 +31,11 @@ public class CPUController {
     private Integer ir =0;
     private Integer pc =0;
     private Memory memory;
+    FileLoader loader;
     private final CPURegister ac = new CPURegister(0);
+    //CPU_Menu menu = new CPU_Menu();
+    
+    
     public CPUController(){
         this.registerAddressMapper.put(1, ax);
         this.registerAddressMapper.put(2, bx);
@@ -36,11 +44,22 @@ public class CPUController {
                 
         
     }
+    
+    
+    
     public Memory getMemory(){
         return this.memory;
     }
+
+    public FileLoader getLoader() {
+        return loader;
+    }
+    
+    
+    
+    
     //Ejecuta la instruccion segun el PC (una a una)
-    public void executeInstruction(){
+    public ArrayList<String> executeInstruction(){
         if(this.pc ==0 ){
             this.pc = this.memory.getAllocationIndex();
         }
@@ -61,6 +80,17 @@ public class CPUController {
          
         }
         this.pc++;
+        
+        
+            ArrayList<String> list = new ArrayList<>();
+            list.add(this.ax.getValue().toString());
+            list.add(this.bx.getValue().toString());
+            list.add(this.cx.getValue().toString());
+            list.add(this.dx.getValue().toString());
+            list.add(this.ac.getValue().toString());
+            list.add(this.ir.toString());
+            list.add(this.pc.toString());
+            list.add(instruction.toBinaryString());
             
             System.out.println("-------------------------------");
             System.out.println("Ax Value:" + this.ax.getValue());
@@ -72,20 +102,34 @@ public class CPUController {
             System.out.println("PC:" + this.pc.toString());
             System.out.println("Binario:" + instruction.toBinaryString());
             System.out.println("-------------------------------");
+            
+            
+            return list;
+            //this.menu.txtAX.setText(this.ax.getValue().toString());
+            //this.menu.txtBX.setText(this.bx.getValue().toString());
+            //this.menu.txtCX.setText(this.cx.getValue().toString());
+            //this.menu.txtAC.setText(this.ac.getValue().toString());
+            //this.menu.txtIR.setText(this.ir.toString());
+            //this.menu.txtPC.setText(this.pc.toString());
+            
+            
     }
         
     
     public void setCPUMemory(String  path, int memSize){
         this.memory = new Memory(memSize);
-        FileLoader loader = new FileLoader(path);
+        this.loader = new FileLoader(path);
         this.memory.allocate(loader.getInstrucionSet());
     }
-    public void executeAll(String  path, int memSize){
+    public Object [][] executeAll(String  path, int memSize){
         
         Memory memory = new Memory(memSize);
         FileLoader loader = new FileLoader(path);
         memory.allocate(loader.getInstrucionSet());
-                
+        
+        
+        
+        
         for(int i = 0; i < memory.getInstructions().size(); i ++){
             Optional<MemoryRegister> register = memory.getInstructions().get(i);
             MemoryRegister instruction = null;
@@ -109,6 +153,13 @@ public class CPUController {
                 default -> {
                 }
             }
+            
+           s[this.pc][0] = instruction.toBinaryString();
+            
+            
+            System.out.println("PC:" + this.pc.toString());
+            System.out.println("Binario:" + instruction.toBinaryString());
+            /*
             System.out.println("-------------------------------");
             System.out.println("Ax Value:" + this.ax.getValue());
             System.out.println("Bx Value:" + this.bx.getValue());
@@ -118,9 +169,10 @@ public class CPUController {
             System.out.println("IR:" + this.ir.toString());
             System.out.println("PC:" + this.pc.toString());
             System.out.println("-------------------------------");
+            */
         }
         
-        
+        return s;
         
         
     }
@@ -152,4 +204,8 @@ public class CPUController {
         Integer value = this.registerAddressMapper.get(reg.getAdress()).getValue();
         this.ac.setValue(value+this.ac.getValue());
     }
+    
+    
+    
+    
 }

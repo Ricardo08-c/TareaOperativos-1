@@ -138,8 +138,14 @@ public class FileLoader {
                
         
     }
+
+    public String getFileDirectory() {
+        return fileDirectory;
+    }
         
-        
+    
+    
+    
     
 }
 

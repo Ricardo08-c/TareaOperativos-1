@@ -6,6 +6,7 @@ package javaapplication2;
 
 import java.util.Random;
 import javaapplication2.contoller.CPUController;
+import view.Main_Menu;
 
 /**
  *
@@ -17,15 +18,21 @@ public class JavaApplication2 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        
+        new Main_Menu().setVisible(true);
+        
+        
+        /*
         CPUController cpu = new CPUController();
-        String pa = "/Users/ricardosoto/Downloads/asm1/asm1.asm";
+        String pa = "C:\\Users\\Administrador\\OneDrive\\II Semestre, 2022\\Principios de Sistemas Operativos\\Ejemplo.asm";
         cpu.setCPUMemory(pa, 100);
         int cantinstrucciones = 7; 
         for(int i = 0 ; i < cantinstrucciones; i ++){
          cpu.executeInstruction();   
         }
         
-        
+        */
          
 
                

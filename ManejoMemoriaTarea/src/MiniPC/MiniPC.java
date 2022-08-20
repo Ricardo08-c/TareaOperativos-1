@@ -2,17 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package javaapplication2;
+package MiniPC;
 
 import java.util.Random;
-import javaapplication2.contoller.CPUController;
-import view.Main_Menu;
+import MiniPC.controller.CPUController;
+import MiniPC.view.Main_Menu;
 
 /**
  *
  * @author ricardosoto
  */
-public class JavaApplication2 {
+public class MiniPC {
 
     /**
      * @param args the command line arguments

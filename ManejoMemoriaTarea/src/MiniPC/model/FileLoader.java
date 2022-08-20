@@ -2,13 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package javaapplication2.model;
+package MiniPC.model;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -16,11 +17,14 @@ import java.util.HashMap;
  * @author ricardosoto
  */
 public class FileLoader {
+    
     String fileDirectory;
     ArrayList<MemoryRegister> instructionSet = new ArrayList<>();
     HashMap<String,Integer> instructionMapper;
     ArrayList<String> instructions;
     HashMap<String,Integer> registerMapper;
+    int countErrors = 0;
+    
     public FileLoader(String path){       
   
         this.loadMapper();
@@ -42,7 +46,11 @@ public class FileLoader {
             String line = reader.readLine();
             while(line != null) {          
                 if(!this.validGrammar(line)){
-                    System.out.println("Error en el formato del archivo");
+                    
+                    
+                    // System.out.println("ERROR EN TAL LINEA -> );
+                    
+                    countErrors++;
                     return;
                 } 
                     this.instructionSet.add(processInstruction(line));
@@ -141,7 +149,13 @@ public class FileLoader {
     public String getFileDirectory() {
         return fileDirectory;
     }
-        
+
+    public int getCountErrors() {
+        return countErrors;
+    }
+       
+    
+    
     
     
     

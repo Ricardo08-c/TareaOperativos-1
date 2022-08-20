@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package view;
+package MiniPC.view;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import javaapplication2.contoller.CPUController;
+import MiniPC.controller.CPUController;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,72 +23,33 @@ public class CPU_Menu extends javax.swing.JFrame {
     int size;
     File file;
     CPUController cpu;
-    DefaultTableModel model = new DefaultTableModel();
+    DefaultTableModel model = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int i, int j) {return false;};
+    };
     
-    /**
-     * Creates new form CPU_Menu
-     
-    public CPU_Menu(File file, int size) {
-        initComponents();
-        this.size = size;
-        this.file = file;
-        cpu.setCPUMemory(this.file.getAbsolutePath(), this.size);
-        cpu.startCPU(this.size, this.file);
-        String filename = this.file.getName();
-        lblFilename.setText(filename);
-        lbSize.setText(String.valueOf(size));
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new FileReader(file.getAbsolutePath()));
-            String str;
-            while ((str = in.readLine()) != null) {
-                txtArchivo.append(str);
-                txtArchivo.append("\n");
-            }
-        } catch (IOException e) {
-        } finally {
-            try { in.close(); } catch (Exception ex) { }
-        }
-    }
-    */
+    
     CPU_Menu(CPUController cpu, File file) {
         
         initComponents();
+        
         this.cpu = cpu;
         this.size = cpu.getMemory().getSize();
         this.file = file;
         
-        this.model.setRowCount(this.size);
-        this.model.addColumn("Instrucción en código binario");
-        this.model.addColumn("Posición en memoria");
-        this.table.setModel(model);    
-        this.table.getColumnModel().getColumn(1).setResizable(true);
-        this.table.getColumnModel().getColumn(1).setMaxWidth(60);
-        
-        
-       
-              
+        loadTable();      
         fillTable();
         
-        /*
-        this.matrix = cpu.executeAll(this.file.getAbsolutePath(), this.size);
-        
-        for (int x=0; x < this.matrix.length; x++) {
-            System.out.print("|");
-            for (int y=0; y < this.matrix[x].length; y++) {
-                System.out.print (this.matrix[x][y]);
-                if (y!=this.matrix[x].length-1) System.out.print("\t");
-            }
-            System.out.println("|");
-        }
-        
-        //table.setRowCount(this.size);
-        */
         cpu.setCPUMemory(this.file.getAbsolutePath(), this.size);
         String filename = this.file.getName();
         
         lblFilename.setText(filename);
         lbSize.setText(String.valueOf(size));
+        
+    }
+
+    
+    public void loadTextFile() {
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(file.getAbsolutePath()));
@@ -102,13 +63,25 @@ public class CPU_Menu extends javax.swing.JFrame {
             try { in.close(); } catch (Exception ex) { }
         }
     }
-
+    
+    
+    public void loadTable() {
+        
+        this.model.setRowCount(this.size);
+        this.model.addColumn("Instrucción en código binario");
+        this.model.addColumn("Posición");
+        this.table.setModel(model);    
+        this.table.getColumnModel().getColumn(1).setResizable(true);
+        this.table.getColumnModel().getColumn(1).setMaxWidth(60);
+        
+    }
 
     public void fillTable() {
         
         for (int i = 0; i < this.size; i++) {
             table.setValueAt(i+1, i, 1);
         }
+        
     }
     
     
@@ -142,8 +115,8 @@ public class CPU_Menu extends javax.swing.JFrame {
         txtAC = new javax.swing.JLabel();
         txtPC = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
-        jButton1 = new javax.swing.JButton();
-        btmVolver = new javax.swing.JButton();
+        btmClean = new javax.swing.JButton();
+        btmBack = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         lbSize = new javax.swing.JLabel();
@@ -154,6 +127,7 @@ public class CPU_Menu extends javax.swing.JFrame {
         table = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 153, 51));
 
         txtArchivo.setEditable(false);
         txtArchivo.setColumns(20);
@@ -167,7 +141,7 @@ public class CPU_Menu extends javax.swing.JFrame {
         jLabel1.setText("DX");
 
         txtAX.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        txtAX.setText("_______");
+        txtAX.setText("___");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel3.setText("BX");
@@ -179,13 +153,13 @@ public class CPU_Menu extends javax.swing.JFrame {
         jLabel5.setText("AX");
 
         txtBX.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        txtBX.setText("_______");
+        txtBX.setText("___");
 
         txtCX.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        txtCX.setText("_______");
+        txtCX.setText("___");
 
         txtDX.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        txtDX.setText("_______");
+        txtDX.setText("___");
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
@@ -200,15 +174,15 @@ public class CPU_Menu extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(jLabel3)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtAX, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtBX, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtCX, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtDX, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
+                    .addComponent(txtBX)
+                    .addComponent(txtAX)
+                    .addComponent(txtCX)
+                    .addComponent(txtDX))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -267,20 +241,12 @@ public class CPU_Menu extends javax.swing.JFrame {
                     .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(txtAC))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtIR)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtPC)))
-                .addContainerGap())
+                    .addComponent(txtIR)
+                    .addComponent(txtPC)
+                    .addComponent(txtAC))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,18 +260,23 @@ public class CPU_Menu extends javax.swing.JFrame {
                     .addComponent(jLabel14)
                     .addComponent(txtIR))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel15)
                     .addComponent(txtAC))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jSeparator2)
         );
 
-        jButton1.setFont(new java.awt.Font("Inter", 0, 11)); // NOI18N
-        jButton1.setText("Limpiar");
+        btmClean.setFont(new java.awt.Font("Inter", 0, 11)); // NOI18N
+        btmClean.setText("Limpiar");
 
-        btmVolver.setFont(new java.awt.Font("Inter", 0, 11)); // NOI18N
-        btmVolver.setText("Volver");
+        btmBack.setFont(new java.awt.Font("Inter", 0, 11)); // NOI18N
+        btmBack.setText("Volver");
+        btmBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btmBackActionPerformed(evt);
+            }
+        });
 
         jLabel19.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
         jLabel19.setText("Tamaño de memoria:");
@@ -337,6 +308,9 @@ public class CPU_Menu extends javax.swing.JFrame {
                 "Title 1", "Title 2"
             }
         ));
+        table.setEditingColumn(0);
+        table.setEditingRow(0);
+        table.setShowGrid(true);
         jScrollPane2.setViewportView(table);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -353,57 +327,51 @@ public class CPU_Menu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel20))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
                         .addComponent(jLabel22)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblFilename)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 191, Short.MAX_VALUE)
+                        .addGap(166, 166, 166)
                         .addComponent(btmNext))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(18, 18, 18)
-                                .addComponent(btmVolver))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btmClean)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btmBack, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(43, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btmVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(39, 39, 39)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(jLabel20)
+                    .addComponent(lbSize)
+                    .addComponent(jLabel22)
+                    .addComponent(lblFilename)
+                    .addComponent(btmNext, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btmBack, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btmClean, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel19)
-                            .addComponent(jLabel20)
-                            .addComponent(lbSize)
-                            .addComponent(jLabel22)
-                            .addComponent(lblFilename)
-                            .addComponent(btmNext, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -412,33 +380,38 @@ public class CPU_Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btmNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmNextActionPerformed
+        
         if(this.cpu.programFinished()){
-             JOptionPane.showMessageDialog(this.table, "El programa ya terminó de ejecutarse");
+             JOptionPane.showMessageDialog(this, "No hay mas instrucciones por ejecutar","MiniPC", 2);
              return;
 
         }
         ArrayList<String> instruction = this.cpu.executeInstruction();
-        
         txtAX.setText(instruction.get(0));
         txtBX.setText(instruction.get(1));
         txtCX.setText(instruction.get(2));
         txtDX.setText(instruction.get(3));
         txtAC.setText(instruction.get(4));
         txtIR.setText(instruction.get(5));
-        Integer a = Integer.parseInt(instruction.get(6))+1;
-        txtPC.setText(a.toString());
+        Integer pc = Integer.parseInt(instruction.get(6))+1;
+        txtPC.setText(pc.toString());
         
         table.setValueAt(instruction.get(7), Integer.parseInt(instruction.get(6)), 0);
         
         
     }//GEN-LAST:event_btmNextActionPerformed
 
+    private void btmBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmBackActionPerformed
+        this.setVisible(false);
+        new Main_Menu().setVisible(true);
+    }//GEN-LAST:event_btmBackActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btmBack;
+    private javax.swing.JButton btmClean;
     private javax.swing.JButton btmNext;
-    private javax.swing.JButton btmVolver;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;

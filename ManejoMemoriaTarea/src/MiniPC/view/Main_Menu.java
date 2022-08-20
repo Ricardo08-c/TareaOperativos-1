@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package view;
+package MiniPC.view;
 
 import java.io.File;
-import java.io.FilenameFilter;
-import javaapplication2.contoller.CPUController;
+import MiniPC.controller.CPUController;
+import MiniPC.model.FileLoader;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -38,10 +39,12 @@ public class Main_Menu extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtInsertedMemory = new javax.swing.JTextField();
-        btmCargar = new javax.swing.JButton();
-        btmEmpezar = new javax.swing.JButton();
+        btmLoad = new javax.swing.JButton();
+        btmStart = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 153, 0));
+        setForeground(java.awt.Color.orange);
 
         jLabel2.setFont(new java.awt.Font("Inter", 1, 48)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 102));
@@ -57,19 +60,19 @@ public class Main_Menu extends javax.swing.JFrame {
             }
         });
 
-        btmCargar.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        btmCargar.setText("Cargar Archivo .asm");
-        btmCargar.addActionListener(new java.awt.event.ActionListener() {
+        btmLoad.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        btmLoad.setText("Cargar Archivo .asm");
+        btmLoad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btmCargarActionPerformed(evt);
+                btmLoadActionPerformed(evt);
             }
         });
 
-        btmEmpezar.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        btmEmpezar.setText("Empezar");
-        btmEmpezar.addActionListener(new java.awt.event.ActionListener() {
+        btmStart.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        btmStart.setText("Empezar");
+        btmStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btmEmpezarActionPerformed(evt);
+                btmStartActionPerformed(evt);
             }
         });
 
@@ -80,8 +83,8 @@ public class Main_Menu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(57, 57, 57)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btmCargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btmEmpezar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btmLoad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btmStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
@@ -103,44 +106,56 @@ public class Main_Menu extends javax.swing.JFrame {
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtInsertedMemory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
-                .addComponent(btmCargar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btmLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btmEmpezar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btmStart, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(38, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btmCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmCargarActionPerformed
+    private void btmLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmLoadActionPerformed
+        
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(null);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("assembly","*.asm");
-
-
-        //chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        
-            
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("assembly","*.asm");    
         File loadedFile = chooser.getSelectedFile();
         this.file = loadedFile;
-        //String filename = file.getAbsolutePath();
 
-    }//GEN-LAST:event_btmCargarActionPerformed
+    }//GEN-LAST:event_btmLoadActionPerformed
 
-    private void btmEmpezarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmEmpezarActionPerformed
-       
+    private void btmStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmStartActionPerformed
+        
         if (txtInsertedMemory.getText().isBlank()) {
-            //
-        } else {
-            if (!isNumeric(txtInsertedMemory.getText())) {
-                //
-            } else {
-                Integer size = Integer.parseInt(txtInsertedMemory.getText());
-                cpu.setCPUMemory(this.file.getAbsolutePath(), size);
-                new CPU_Menu(cpu, file).setVisible(true);
-            }
+            JOptionPane.showMessageDialog(this, "¡Debes definir el tamaño de la memoria!","MiniPC", 2);
+            return;
+        } 
+        
+        if (!isNumeric(txtInsertedMemory.getText())) {
+            JOptionPane.showMessageDialog(this, "¡Debes ingresar un número entero!","MiniPC", 2);
+            return;
+        } 
+        
+        if (this.file == null) {
+            JOptionPane.showMessageDialog(this, "¡Debes cargar un archivo .asm!","MiniPC", 2);
+            return;
         }
-    }//GEN-LAST:event_btmEmpezarActionPerformed
+        
+        FileLoader file = new FileLoader(this.file.getAbsolutePath());
+        if (file.getCountErrors()>0) {
+            JOptionPane.showMessageDialog(this, "El archivo cargado presenta errores de sintaxís\nRevisa la consola","MiniPC", 0);
+            return;
+        }
+
+        Integer size = Integer.parseInt(txtInsertedMemory.getText());
+        cpu.setCPUMemory(this.file.getAbsolutePath(), size);
+        this.setVisible(false);
+        new CPU_Menu(this.cpu, this.file).setVisible(true);
+        
+        
+    }//GEN-LAST:event_btmStartActionPerformed
 
     private void txtInsertedMemoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInsertedMemoryActionPerformed
         // TODO add your handling code here:
@@ -197,8 +212,8 @@ public class Main_Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btmCargar;
-    private javax.swing.JButton btmEmpezar;
+    private javax.swing.JButton btmLoad;
+    private javax.swing.JButton btmStart;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField txtInsertedMemory;

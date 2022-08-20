@@ -2,18 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package javaapplication2.contoller;
+package MiniPC.controller;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
-import javaapplication2.model.CPURegister;
-import javaapplication2.model.FileLoader;
-import javaapplication2.model.Memory;
-import javaapplication2.model.MemoryRegister;
-import view.CPU_Menu;
+import MiniPC.model.CPURegister;
+import MiniPC.model.FileLoader;
+import MiniPC.model.Memory;
+import MiniPC.model.MemoryRegister;
+import MiniPC.view.CPU_Menu;
 
 
 /**

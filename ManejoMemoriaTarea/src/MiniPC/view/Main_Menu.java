@@ -143,14 +143,18 @@ public class Main_Menu extends javax.swing.JFrame {
             return;
         }
         
-        FileLoader file = new FileLoader(this.file.getAbsolutePath());
-        if (file.getCountErrors()>0) {
-            JOptionPane.showMessageDialog(this, "El archivo cargado presenta errores de sintaxís\n"+ file.getErrorMessage(),"MiniPC", 0);
+        FileLoader fileLoader = new FileLoader(this.file.getAbsolutePath());
+        if (fileLoader.getCountErrors()>0) {
+            JOptionPane.showMessageDialog(this, "El archivo cargado presenta errores de sintaxís\n"+ fileLoader.getErrorMessage(),"MiniPC", 0);
             
             return;
         }
 
         Integer size = Integer.parseInt(txtInsertedMemory.getText());
+        if(fileLoader.getInstrucionSet().size()> size-10){
+            JOptionPane.showMessageDialog(this, "El tamaño de memoria no es sufuciente para procesar el archivo","MiniPC", 0);
+            return;
+        }
         cpu.setCPUMemory(this.file.getAbsolutePath(), size);
         this.setVisible(false);
         new CPU_Menu(this.cpu, this.file).setVisible(true);

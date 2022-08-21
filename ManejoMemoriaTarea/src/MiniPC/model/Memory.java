@@ -33,14 +33,16 @@ public class Memory {
     public ArrayList<Optional<MemoryRegister>> getInstructions(){
         return this.registers;
     }
-    private boolean spaceFull(int startingIndex, int space){
-        
+    private boolean spaceFull(int startingIndex, int space){        
         if(startingIndex + space > this.size){
+                    System.out.println(startingIndex + space+"123123");
+            
             return true;   
         }
         if(this.registers.get(startingIndex).isEmpty()){
             for(int i = startingIndex ; i < space; i ++){
-                if(this.registers.get(i).isPresent()){
+                if(this.registers.get(i).isPresent()){                    
+                    System.out.println(startingIndex + space+"6969969");
                     return true;
                 }
             }
@@ -60,15 +62,22 @@ public class Memory {
         //Inicia a partir del índice START_INDEX
         Random rand = new Random();
         int startAllocate = rand.nextInt(this.size);
-        if(startAllocate <=this.START_INDEX) startAllocate+=this.START_INDEX;
-        while(this.spaceFull(startAllocate,instructions.size())){
-            startAllocate = rand.nextInt(this.size);
-            if(startAllocate <=this.START_INDEX) startAllocate+=this.START_INDEX;
+        while(startAllocate <this.START_INDEX) {
+            startAllocate++;
             
         }
+        while(this.spaceFull(startAllocate,instructions.size())){
+            startAllocate = rand.nextInt(this.size);
+            while(startAllocate <this.START_INDEX) {
+                startAllocate++;
+            
+            }
+            
+        }
+        
         int j = 0;
         this.allocationIndex = startAllocate;
-                     
+        System.out.println(this.allocationIndex);
         for(int i = startAllocate ; i <instructions.size()+startAllocate; i ++){
             this.registers.add(i, Optional.of(instructions.get(j)));
             j++;

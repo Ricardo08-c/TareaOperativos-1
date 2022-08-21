@@ -55,6 +55,7 @@ public class FileLoader {
                 this.instructionSet.add(processInstruction(line));
                 linePos++;
                 line = reader.readLine();
+                
             }
             if(linePos ==0){
                 countErrors++;

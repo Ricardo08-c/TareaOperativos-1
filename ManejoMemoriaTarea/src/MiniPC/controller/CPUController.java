@@ -85,7 +85,7 @@ public class CPUController {
             }
          
         }
-        this.pc++;
+        
         
         
             ArrayList<String> list = new ArrayList<>();
@@ -95,11 +95,10 @@ public class CPUController {
             list.add(this.dx.getValue().toString());
             list.add(this.ac.getValue().toString());
             list.add(this.ir.toString());
-            Integer pcPlus = this.pc+1;
-            list.add(pcPlus.toString());
-            list.add(instruction.toBinaryString());
             
-            System.out.println("-------------------------------");
+            list.add(this.pc.toString());
+            list.add(instruction.toBinaryString());
+                System.out.println("-------------------------------");
             System.out.println("Ax Value:" + this.ax.getValue());
             System.out.println("Bx Value:" + this.bx.getValue());
             System.out.println("Cx Value:" + this.cx.getValue());
@@ -109,6 +108,9 @@ public class CPUController {
             System.out.println("PC:" + this.pc.toString());
             System.out.println("Binario:" + instruction.toBinaryString());
             System.out.println("-------------------------------");
+           this.pc++;
+            
+        
             
             
             return list;
@@ -121,7 +123,7 @@ public class CPUController {
     
     public void setCPUMemory(String  path, int memSize){
         this.memory = new Memory(memSize);
-        this.loader = new FileLoader(path);
+        this.loader = new FileLoader(path);        
         this.memory.allocate(loader.getInstrucionSet());
     }
     public void executeAll(String  path, int memSize){

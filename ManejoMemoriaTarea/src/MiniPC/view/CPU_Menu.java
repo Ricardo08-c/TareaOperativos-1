@@ -39,6 +39,7 @@ public class CPU_Menu extends javax.swing.JFrame {
         
         loadTable();      
         fillTable();
+        loadTextFile();
         
         cpu.setCPUMemory(this.file.getAbsolutePath(), this.size);
         String filename = this.file.getName();

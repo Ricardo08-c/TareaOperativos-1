@@ -24,6 +24,7 @@ public class FileLoader {
     ArrayList<String> instructions;
     HashMap<String,Integer> registerMapper;
     int countErrors = 0;
+    private ErrorHandler errorHandler;
     
     public FileLoader(String path){       
   
@@ -44,22 +45,26 @@ public class FileLoader {
         try {
             reader = new BufferedReader(new FileReader(path));
             String line = reader.readLine();
+            int linePos = 0;
             while(line != null) {          
-                if(!this.validGrammar(line)){
-                    
-                    
-                    // System.out.println("ERROR EN TAL LINEA -> );
+                if(!this.validGrammar(line,linePos)){                                                           
                     
                     countErrors++;
                     return;
                 } 
-                    this.instructionSet.add(processInstruction(line));
+                this.instructionSet.add(processInstruction(line));
+                linePos++;
                 line = reader.readLine();
             }
+            if(linePos ==0){
+                countErrors++;
+                this.errorHandler = new ErrorHandler(-1,"Archivo vació","El archivo cargado no tiene contendio.");                               
+         }
+        
             
         } catch (IOException e) {
-            //tirar un error en la interfaz
-            e.printStackTrace();
+            countErrors++;
+            this.errorHandler = new ErrorHandler(-1,"Lectura de archivo","La lectura en el archivo ha sido fallida.");                                        
         }
     }
     
@@ -77,45 +82,74 @@ public class FileLoader {
         this.registerMapper.put("dx", 4);
         
     }
-    private boolean validGrammar(String line){
+    public String getErrorMessage(){
+        return this.errorHandler.returnErrorMesage();
+    }
+    private boolean validGrammar(String line, int linePos){
         String[] comaSplit = line.split(",");        
         switch (comaSplit.length) {
             case 2:
-                return this.validAsignation(comaSplit);
+                return this.validAsignation(comaSplit,linePos);
             case 1:
-                return this.validOperation(comaSplit);
+                return this.validOperation(comaSplit,linePos);
             default:
+                this.errorHandler = new ErrorHandler(linePos,"Sintaxis inválida","La sintaxis no es reconocida.");                
                 return false;
         }
         
         
     }
     
-    private boolean validAsignation(String[] splitedLine){
+    private boolean validAsignation(String[] splitedLine,int linePos){
         
         String[] asignation = splitedLine[0].split(" ");
         Integer opr = instructionMapper.get(asignation[0].toLowerCase());
         if(asignation.length <= 1 || asignation.length >2){
+            this.errorHandler = new ErrorHandler(linePos,"Asignación incorrecta","La sintáxis en la asignación es incorrecta.");                
             return false;
+            
         }
         Integer reg = registerMapper.get(asignation[1].toLowerCase());
         try{             
-            Integer.parseInt(splitedLine[1].trim());
-        } catch(NumberFormatException e){            
+            Integer.parseInt(splitedLine[1].trim());            
+        } catch(NumberFormatException e){           
+            this.errorHandler = new ErrorHandler(linePos,"Asignación incorrecta","El valor de la asignación no es operable.");                
             return false;
         }
+        if(opr==null){
+            this.errorHandler = new ErrorHandler(linePos,"Operación no reconocida","La operación en la asignación no es reconocida.");      
+        }
+        if(reg==null){
+            this.errorHandler = new ErrorHandler(linePos,"Registro inváildo","El registro en la asignación es inválido.");      
+        }
+        if(opr != 3){
+            this.errorHandler = new ErrorHandler(linePos,"Operador inválido","El operador no es válido para asignación.");      
+            return false;
+        }
+        
         
         return opr !=null && reg!=null;
               
     }
-    private boolean validOperation(String[] splitedLine){
+    private boolean validOperation(String[] splitedLine,int linePos){
          String[] asignation = splitedLine[0].split(" ");
           if(asignation.length <= 1 || asignation.length >2){
+              this.errorHandler = new ErrorHandler(linePos,"Operación incorrecta","La sintáxis en la operación es incorrecta.");                
             return false;
         }
         Integer opr = instructionMapper.get(asignation[0].toLowerCase());
         Integer reg = registerMapper.get(asignation[1].toLowerCase());
+        if(opr==null){
+            this.errorHandler = new ErrorHandler(linePos,"Operador no reconocido","El operador en la operación no es reonocido.");      
+        }
+        if(reg==null){
+            this.errorHandler = new ErrorHandler(linePos,"Registro inváildo","El registro en la operación es inválido.");      
+        }
         
+        if(opr == 3){
+            this.errorHandler = new ErrorHandler(linePos,"Operador inválido","El operador (MOV) no es válido para la operación.");      
+            return false;
+        }
         return opr!=null && reg!=null;
         
     }

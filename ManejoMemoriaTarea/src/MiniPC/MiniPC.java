@@ -23,16 +23,7 @@ public class MiniPC {
         new Main_Menu().setVisible(true);
         
         
-        /*
-        CPUController cpu = new CPUController();
-        String pa = "C:\\Users\\Administrador\\OneDrive\\II Semestre, 2022\\Principios de Sistemas Operativos\\Ejemplo.asm";
-        cpu.setCPUMemory(pa, 100);
-        int cantinstrucciones = 7; 
-        for(int i = 0 ; i < cantinstrucciones; i ++){
-         cpu.executeInstruction();   
-        }
-        
-        */
+       
          
 
                

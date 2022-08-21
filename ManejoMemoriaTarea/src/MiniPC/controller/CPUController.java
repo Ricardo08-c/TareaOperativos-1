@@ -112,12 +112,8 @@ public class CPUController {
             
             
             return list;
-            //this.menu.txtAX.setText(this.ax.getValue().toString());
-            //this.menu.txtBX.setText(this.bx.getValue().toString());
-            //this.menu.txtCX.setText(this.cx.getValue().toString());
-            //this.menu.txtAC.setText(this.ac.getValue().toString());
-            //this.menu.txtIR.setText(this.ir.toString());
-            //this.menu.txtPC.setText(this.pc.toString());
+       
+       
             
             
     }

@@ -145,7 +145,8 @@ public class Main_Menu extends javax.swing.JFrame {
         
         FileLoader file = new FileLoader(this.file.getAbsolutePath());
         if (file.getCountErrors()>0) {
-            JOptionPane.showMessageDialog(this, "El archivo cargado presenta errores de sintaxís\nRevisa la consola","MiniPC", 0);
+            JOptionPane.showMessageDialog(this, "El archivo cargado presenta errores de sintaxís\n"+ file.getErrorMessage(),"MiniPC", 0);
+            
             return;
         }
 

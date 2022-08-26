@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import MiniPC.controller.CPUController;
+import MiniPC.model.MemoryRegister;
+import java.util.Optional;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -37,18 +39,39 @@ public class CPU_Menu extends javax.swing.JFrame {
         this.size = cpu.getMemory().getSize();
         this.file = file;
         
+        
         loadTable();      
         fillTable();
         loadTextFile();
         
-        cpu.setCPUMemory(this.file.getAbsolutePath(), this.size);
+        
+        this.cpu.setCPUMemory(this.file.getAbsolutePath(), this.size);
         String filename = this.file.getName();
+        loadMemory();
         
         lblFilename.setText(filename);
         lbSize.setText(String.valueOf(size));
         
     }
 
+    private void loadMemory(){
+        int index = this.cpu.getMemory().getAllocationIndex();        
+        int size = this.cpu.getLoader().getInstrucionSet().size();
+                
+        Optional<MemoryRegister> register;
+        for( int i  = index; i < (size+index); i++){            
+            
+            
+            register = this.cpu.getMemory().getInstructions().get(i);
+            
+            table.setValueAt(register.get().toBinaryString(), i, 0);            
+
+        }
+        System.out.println(this.cpu.getMemory().getAllocationIndex()+ "damdmdk");
+
+         
+
+    }
     
     public void loadTextFile() {
         BufferedReader in = null;
@@ -395,9 +418,9 @@ public class CPU_Menu extends javax.swing.JFrame {
         txtAC.setText(instruction.get(4));
         txtIR.setText(instruction.get(5));
         Integer pc = Integer.parseInt(instruction.get(6))+1;
-        txtPC.setText(pc.toString());
+        txtPC.setText(pc.toString());        
+
         
-        table.setValueAt(instruction.get(7), Integer.parseInt(instruction.get(6)), 0);
         
         
     }//GEN-LAST:event_btmNextActionPerformed

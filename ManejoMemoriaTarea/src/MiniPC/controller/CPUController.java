@@ -68,6 +68,7 @@ public class CPUController {
         if(this.pc ==0 ){
             this.pc = this.memory.getAllocationIndex();
         }
+        
         Optional<MemoryRegister> register = memory.getInstructions().get(this.pc);
       
         MemoryRegister instruction = register.get();

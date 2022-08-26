@@ -293,6 +293,11 @@ public class CPU_Menu extends javax.swing.JFrame {
 
         btmClean.setFont(new java.awt.Font("Inter", 0, 11)); // NOI18N
         btmClean.setText("Limpiar");
+        btmClean.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btmCleanActionPerformed(evt);
+            }
+        });
 
         btmBack.setFont(new java.awt.Font("Inter", 0, 11)); // NOI18N
         btmBack.setText("Volver");
@@ -419,6 +424,8 @@ public class CPU_Menu extends javax.swing.JFrame {
         txtIR.setText(instruction.get(5));
         Integer pc = Integer.parseInt(instruction.get(6))+1;
         txtPC.setText(pc.toString());        
+        
+        table.setRowSelectionInterval(pc-1, pc-1);
 
         
         
@@ -429,6 +436,16 @@ public class CPU_Menu extends javax.swing.JFrame {
         this.setVisible(false);
         new Main_Menu().setVisible(true);
     }//GEN-LAST:event_btmBackActionPerformed
+
+    private void btmCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmCleanActionPerformed
+        txtAX.setText("____");
+        txtBX.setText("____");
+        txtCX.setText("____");
+        txtDX.setText("____");
+        txtAC.setText("____");
+        txtIR.setText("____");
+        txtPC.setText("____");  
+    }//GEN-LAST:event_btmCleanActionPerformed
 
     
 
